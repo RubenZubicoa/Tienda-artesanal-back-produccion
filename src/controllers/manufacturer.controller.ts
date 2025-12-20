@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { database } from "../db/database";
-import { Manufacturer } from "../types/Manufacturer";
+import { isManufacturer, Manufacturer } from "../types/Manufacturer";
 import { insertManufacturer, getManufacturers as getManufacturersModel, updateManufacturer as updateManufacturerModel, deleteManufacturer as deleteManufacturerModel } from "../models/manufacturer.model";
 import { ObjectId } from "mongodb";
 
@@ -19,6 +19,9 @@ export async function createManufacturer(
   res: Response
 ) {
   const manufacturer: Manufacturer = req.body;
+  if (!isManufacturer(manufacturer)) {
+    return res.status(400).json({ message: "Datos de artesano inválidos" });
+  }
   try {
     const result = await insertManufacturer(manufacturer);
     res.status(201).json(result);
@@ -31,6 +34,9 @@ export async function createManufacturer(
 export async function updateManufacturer(req: Request<{ id: string }, {}, Manufacturer>, res: Response) {
   const manufacturerId = new ObjectId(req.params.id);
   const manufacturer: Manufacturer = req.body;
+  if (!isManufacturer(manufacturer)) {
+    return res.status(400).json({ message: "Datos de artesano inválidos" });
+  }
   try {
     const result = await updateManufacturerModel(manufacturerId, manufacturer);
     res.status(200).json(result);

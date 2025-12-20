@@ -9,6 +9,21 @@ export type Product = {
     stock: number;
     category: string;
     images: string[];
-    createdAt: number;
+    createdAt?: number;
     updatedAt?: number;
+}
+
+export function isProduct(product: unknown): product is Product {
+    return (
+        product !== undefined &&
+        product !== null &&
+        typeof product === "object" &&
+        "manufacturerId" in product &&
+        "name" in product &&
+        "description" in product &&
+        "price" in product &&
+        "stock" in product &&
+        "category" in product &&
+        "images" in product 
+    );
 }

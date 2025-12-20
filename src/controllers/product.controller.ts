@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getProducts as getProductsModel, insertProduct as insertProductModel, updateProduct as updateProductModel, deleteProduct as deleteProductModel } from "../models/product.model";
-import { Product } from "../types/Product";
+import { isProduct, Product } from "../types/Product";
 import { ObjectId } from "mongodb";
 
 export async function getProducts(req: Request, res: Response) {
@@ -14,9 +14,13 @@ export async function getProducts(req: Request, res: Response) {
 }
 
 export async function createProduct(req: Request<{}, {}, Product>, res: Response) {
+    const product: Product = req.body;
+    if (!isProduct(product)) {
+        return res.status(400).json({ message: "Datos de producto inválidos" });
+    }
     try {
-        const product = await insertProductModel(req.body);
-        res.status(201).json(product);
+        const result = await insertProductModel(product);
+        res.status(201).json(result);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error al crear el producto", error: error });
@@ -26,6 +30,9 @@ export async function createProduct(req: Request<{}, {}, Product>, res: Response
 export async function updateProduct(req: Request<{ id: string }, {}, Product>, res: Response) {
     const productId = new ObjectId(req.params.id);
     const product: Product = req.body;
+    if (!isProduct(product)) {
+        return res.status(400).json({ message: "Datos de producto inválidos" });
+    }
     try {
         const result = await updateProductModel(productId, product);
         res.status(200).json(result);

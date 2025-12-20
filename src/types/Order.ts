@@ -17,3 +17,18 @@ export type Order = {
     createdAt: number;
     updatedAt?: number;
 }
+
+export function isOrder(order: unknown): order is Order {
+    return (
+        order !== undefined &&
+        order !== null &&
+        typeof order === "object" &&
+        "username" in order &&
+        "address" in order &&
+        "phone" in order &&
+        "email" in order &&
+        "products" in order &&
+        "total" in order &&
+        "status" in order
+    );
+}

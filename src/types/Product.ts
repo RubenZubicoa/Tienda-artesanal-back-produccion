@@ -1,5 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export type Product = {
-    uuid: string;
+    _id?: ObjectId;
     manufacturerId: string;
     name: string;
     description?: string;

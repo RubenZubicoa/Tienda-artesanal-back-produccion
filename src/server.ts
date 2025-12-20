@@ -2,6 +2,7 @@ import express, { type Application } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import manufacturerRoutes from './routes/manufacturer.routes';
+import productRoutes from './routes/product.routes';
 
 const server: Application = express();
 
@@ -15,5 +16,6 @@ server.use(express.urlencoded({ extended: true }));
 // Routes
 
 server.use('/api/manufacturers', manufacturerRoutes);
+server.use('/api/products', productRoutes);
 
 export default server;

@@ -17,6 +17,7 @@ export async function getManufacturers() {
 export async function insertManufacturer(manufacturer: Manufacturer) {
     try {
         await clientDB.connect();
+        manufacturer.createdAt = Date.now();
         const result = await database.collection("Manufacturers").insertOne(manufacturer);
         await clientDB.close();
         return result;
@@ -30,6 +31,7 @@ export async function insertManufacturer(manufacturer: Manufacturer) {
 export async function updateManufacturer(manufacturerId: Manufacturer['_id'], manufacturer: Manufacturer) {
     try {
         await clientDB.connect();
+        manufacturer.updatedAt = Date.now();
         const result = await database.collection("Manufacturers").updateOne({ _id: manufacturerId }, { $set: manufacturer });
         await clientDB.close();
         return result;

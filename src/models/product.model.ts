@@ -1,5 +1,4 @@
 import { clientDB, database } from "../db/database";
-import { Manufacturer } from "../types/Manufacturer";
 import { Product } from "../types/Product";
 
 export async function getProducts() {

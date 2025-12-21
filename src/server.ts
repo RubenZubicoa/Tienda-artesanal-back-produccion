@@ -5,6 +5,7 @@ import manufacturerRoutes from './routes/manufacturer.routes';
 import productRoutes from './routes/product.routes';
 import orderRoutes from './routes/order.routes';
 import userRoutes from './routes/user.routes';
+import categoryRoutes from './routes/category.routes';
 
 const server: Application = express();
 
@@ -20,5 +21,6 @@ server.use('/api/manufacturers', manufacturerRoutes);
 server.use('/api/products', productRoutes);
 server.use('/api/orders', orderRoutes);
 server.use('/api/users', userRoutes);
+server.use('/api/categories', categoryRoutes);
 
 export default server;

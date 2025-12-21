@@ -24,6 +24,7 @@ export function isProduct(product: unknown): product is Product {
         "price" in product &&
         "stock" in product &&
         "category" in product &&
-        "images" in product 
+        "images" in product &&
+        Array.isArray(product.images)
     );
 }

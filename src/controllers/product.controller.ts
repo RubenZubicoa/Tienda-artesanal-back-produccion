@@ -1,54 +1,93 @@
 import { Request, Response } from "express";
-import { getProducts as getProductsModel, insertProduct as insertProductModel, updateProduct as updateProductModel, deleteProduct as deleteProductModel } from "../models/product.model";
+import {
+  getProducts as getProductsModel,
+  insertProduct as insertProductModel,
+  updateProduct as updateProductModel,
+  deleteProduct as deleteProductModel,
+  getProductsByManufacturerId as getProductsByManufacturerIdModel,
+} from "../models/product.model";
 import { isProduct, Product } from "../types/Product";
 import { ObjectId } from "mongodb";
 
 export async function getProducts(req: Request, res: Response) {
-    try {
-        const products = await getProductsModel();
-        res.status(200).json(products);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error al obtener los productos", error: error });
-    }
+  try {
+    const products = await getProductsModel();
+    res.status(200).json(products);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al obtener los productos", error: error });
+  }
 }
 
-export async function createProduct(req: Request<{}, {}, Product>, res: Response) {
-    const product: Product = req.body;
-    if (!isProduct(product)) {
-        return res.status(400).json({ message: "Datos de producto inválidos" });
-    }
-    try {
-        const result = await insertProductModel(product);
-        res.status(201).json(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error al crear el producto", error: error });
-    }
+export async function getProductsByManufacturerId(
+  req: Request<{ id: string }>,
+  res: Response
+) {
+  const manufacturerId = req.params.id;
+  try {
+    const products = await getProductsByManufacturerIdModel(manufacturerId);
+    res.status(200).json(products);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al obtener los productos", error: error });
+  }
 }
 
-export async function updateProduct(req: Request<{ id: string }, {}, Product>, res: Response) {
-    const productId = new ObjectId(req.params.id);
-    const product: Product = req.body;
-    if (!isProduct(product)) {
-        return res.status(400).json({ message: "Datos de producto inválidos" });
-    }
-    try {
-        const result = await updateProductModel(productId, product);
-        res.status(200).json(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error al actualizar el producto", error: error });
-    }
+export async function createProduct(
+  req: Request<{}, {}, Product>,
+  res: Response
+) {
+  const product: Product = req.body;
+  if (!isProduct(product)) {
+    return res.status(400).json({ message: "Datos de producto inválidos" });
+  }
+  try {
+    const result = await insertProductModel(product);
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al crear el producto", error: error });
+  }
 }
 
-export async function deleteProduct(req: Request<{ id: string }>, res: Response) {
-    const productId = req.params.id;
-    try {
-        const result = await deleteProductModel(new ObjectId(productId));
-        res.status(200).json(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error al eliminar el producto", error: error });
-    }
+export async function updateProduct(
+  req: Request<{ id: string }, {}, Product>,
+  res: Response
+) {
+  const productId = new ObjectId(req.params.id);
+  const product: Product = req.body;
+  if (!isProduct(product)) {
+    return res.status(400).json({ message: "Datos de producto inválidos" });
+  }
+  try {
+    const result = await updateProductModel(productId, product);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al actualizar el producto", error: error });
+  }
+}
+
+export async function deleteProduct(
+  req: Request<{ id: string }>,
+  res: Response
+) {
+  const productId = req.params.id;
+  try {
+    const result = await deleteProductModel(new ObjectId(productId));
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al eliminar el producto", error: error });
+  }
 }

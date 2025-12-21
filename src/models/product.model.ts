@@ -1,10 +1,24 @@
 import { clientDB, database } from "../db/database";
+import { Manufacturer } from "../types/Manufacturer";
 import { Product } from "../types/Product";
 
 export async function getProducts() {
     try {
         await clientDB.connect();
         const products = await database.collection("Products").find().toArray();
+        await clientDB.close();
+        return products;
+    } catch (error) {
+        await clientDB.close();
+        console.error(error);
+        throw new Error("Error al obtener los productos");
+    }
+}
+
+export async function getProductsByManufacturerId(manufacturerId: string) {
+    try {
+        await clientDB.connect();
+        const products = await database.collection("Products").find({ manufacturerId: manufacturerId }).toArray();
         await clientDB.close();
         return products;
     } catch (error) {

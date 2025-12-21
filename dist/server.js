@@ -16,6 +16,9 @@ server.use((0, cors_1.default)());
 server.use(express_1.default.json());
 server.use(express_1.default.urlencoded({ extended: true }));
 // Routes
+server.use('/', (req, res) => {
+    res.send('Hello World');
+});
 server.use('/api/manufacturers', manufacturer_routes_1.default);
 server.use('/api/products', product_routes_1.default);
 server.use('/api/orders', order_routes_1.default);

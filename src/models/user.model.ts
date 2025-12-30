@@ -1,5 +1,6 @@
 import { clientDB, database } from "../db/database";
 import { User } from "../types/User";
+import { hashPassword } from "../utils/password-utils";
 
 
 export async function getUserByEmail(email: string) {
@@ -19,6 +20,7 @@ export async function insertUser(user: User) {
     try {
         await clientDB.connect();
         user.createdAt = Date.now();
+        user.password = await hashPassword(user.password);
         const result = await database.collection("Users").insertOne(user);
         await clientDB.close();
         return result;

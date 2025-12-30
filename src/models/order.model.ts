@@ -14,6 +14,32 @@ export async function getOrders() {
     }
 }
 
+export async function getOrdersByManufacturerId(manufacturerId: string) {
+    try {
+        await clientDB.connect();
+        const orders = await database.collection("Orders").find({ manufacturerId: manufacturerId }).toArray();
+        await clientDB.close();
+        return orders;
+    } catch (error) {
+        await clientDB.close();
+        console.error(error);
+        throw new Error("Error al obtener las ordenes");
+    }
+}
+
+export async function getOrderById(orderId: Order['_id']) {
+    try {
+        await clientDB.connect();
+        const order = await database.collection("Orders").findOne({ _id: orderId });
+        await clientDB.close();
+        return order;
+    } catch (error) {
+        await clientDB.close();
+        console.error(error);
+        throw new Error("Error al obtener la orden por id");
+    }
+}
+
 export async function insertOrder(order: AddOrder) {
     try {
         await clientDB.connect();

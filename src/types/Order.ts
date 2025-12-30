@@ -1,6 +1,8 @@
 import { ObjectId } from "mongodb";
 import { Product } from "./Product";
 
+export type OrderStatus = 'pending' | 'completed' | 'cancelled' | 'shipped' | 'delivered' | 'returned';
+
 export type Order = {
     _id?: ObjectId;
     username: string;
@@ -13,7 +15,7 @@ export type Order = {
         price: number;
     }[];
     manufacturerId: string;
-    status: string;
+    status: OrderStatus;
     createdAt: number;
     updatedAt?: number;
 }

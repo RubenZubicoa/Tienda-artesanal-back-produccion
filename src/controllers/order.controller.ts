@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getOrders as getOrdersModel, getOrdersByManufacturerId as getOrdersByManufacturerIdModel, getOrderById as getOrderByIdModel, insertOrder as insertOrderModel, updateOrder as updateOrderModel, deleteOrder as deleteOrderModel } from "../models/order.model";
+import { getOrders as getOrdersModel, getOrdersByManufacturerId as getOrdersByManufacturerIdModel, getOrderById as getOrderByIdModel, insertOrder as insertOrderModel, updateOrder as updateOrderModel, deleteOrder as deleteOrderModel, getOrdersByEmail as getOrdersByEmailModel } from "../models/order.model";
 import { AddOrder, isAddOrder, isOrder, Order } from "../types/Order";
 import { ObjectId } from "mongodb";
 
@@ -17,6 +17,17 @@ export async function getOrdersByManufacturerId(req: Request<{ id: string }>, re
     const manufacturerId = req.params.id;
     try {
         const orders = await getOrdersByManufacturerIdModel(manufacturerId);
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error al obtener las ordenes", error: error });
+    }
+}
+
+export async function getOrdersByEmail(req: Request<{ email: string }>, res: Response) {
+    const email = req.params.email;
+    try {
+        const orders = await getOrdersByEmailModel(email);
         res.status(200).json(orders);
     } catch (error) {
         console.error(error);

@@ -27,6 +27,19 @@ export async function getOrdersByManufacturerId(manufacturerId: string) {
     }
 }
 
+export async function getOrdersByEmail(email: string) {
+    try {
+        await clientDB.connect();
+        const orders = await database.collection("Orders").find({ email: email }).toArray();
+        await clientDB.close();
+        return orders;
+    } catch (error) {
+        await clientDB.close();
+        console.error(error);
+        throw new Error("Error al obtener las ordenes");
+    }
+}
+
 export async function getOrderById(orderId: Order['_id']) {
     try {
         await clientDB.connect();
@@ -45,7 +58,6 @@ export async function insertOrder(order: AddOrder) {
         await clientDB.connect();
         const newOrder: Order = {...order, createdAt: Date.now(), status: "pending"};
         const result = await database.collection("Orders").insertOne(newOrder);
-        await clientDB.close();
         return result;
     } catch (error) {
         await clientDB.close();

@@ -7,6 +7,7 @@ import orderRoutes from './routes/order.routes';
 import userRoutes from './routes/user.routes';
 import categoryRoutes from './routes/category.routes';
 import loginRoutes from './routes/login.routes';
+import meetingPointRoutes from './routes/meetingPoint.routes';
 
 const server: Application = express();
 
@@ -24,5 +25,6 @@ server.use('/api/orders', orderRoutes);
 server.use('/api/users', userRoutes);
 server.use('/api/categories', categoryRoutes);
 server.use('/api/login', loginRoutes);
+server.use('/api/meeting-points', meetingPointRoutes);
 
 export default server;

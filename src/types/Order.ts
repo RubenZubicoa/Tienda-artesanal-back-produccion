@@ -3,6 +3,18 @@ import { Product } from "./Product";
 
 export type OrderStatus = 'pending' | 'completed' | 'cancelled' | 'shipped' | 'delivered' | 'returned';
 
+export type OrderFilters = {
+    username?: string;
+    phone?: string;
+    email?: string;
+    status?: OrderStatus;
+    createdAt?: {
+        start?: number;
+        end?: number;
+    }
+    manufacturerId?: string;
+}
+
 export type Order = {
     _id?: ObjectId;
     username: string;

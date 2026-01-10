@@ -1,11 +1,22 @@
 import { Request, Response } from "express";
-import { getOrders as getOrdersModel, getOrdersByManufacturerId as getOrdersByManufacturerIdModel, getOrderById as getOrderByIdModel, insertOrder as insertOrderModel, updateOrder as updateOrderModel, deleteOrder as deleteOrderModel, getOrdersByEmail as getOrdersByEmailModel } from "../models/order.model";
-import { AddOrder, isAddOrder, isOrder, Order } from "../types/Order";
+import { getOrders as getOrdersModel, getOrdersByManufacturerId as getOrdersByManufacturerIdModel, getOrderById as getOrderByIdModel, insertOrder as insertOrderModel, updateOrder as updateOrderModel, deleteOrder as deleteOrderModel, getOrdersByEmail as getOrdersByEmailModel, getOrdersByFilters as getOrdersByFiltersModel } from "../models/order.model";
+import { AddOrder, isAddOrder, Order, OrderFilters } from "../types/Order";
 import { ObjectId } from "mongodb";
 
 export async function getOrders(req: Request, res: Response) {
     try {
         const orders = await getOrdersModel();
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error al obtener las ordenes", error: error });
+    }
+}
+
+export async function getOrdersByFilters(req: Request<{}, {}, OrderFilters>, res: Response) {
+    const filters: OrderFilters = req.body;
+    try {
+        const orders = await getOrdersByFiltersModel(filters);
         res.status(200).json(orders);
     } catch (error) {
         console.error(error);

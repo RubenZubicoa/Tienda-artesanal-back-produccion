@@ -1,10 +1,50 @@
+import { Filter, ObjectId } from "mongodb";
 import { clientDB, database } from "../db/database";
-import { AddOrder, Order } from "../types/Order";
+import { AddOrder, Order, OrderFilters } from "../types/Order";
 
 export async function getOrders() {
     try {
         await clientDB.connect();
         const orders = await database.collection("Orders").find().toArray();
+        await clientDB.close();
+        return orders;
+    } catch (error) {
+        await clientDB.close();
+        console.error(error);
+        throw new Error("Error al obtener las ordenes");
+    }
+}
+
+export async function getOrdersByFilters(filters: OrderFilters) {
+    try {
+        await clientDB.connect();
+        const query: Filter<any> = {};
+        if (filters.username) {
+            query.username = filters.username;
+        }
+        if (filters.phone) {
+            query.phone = filters.phone;
+        }
+        if (filters.email) {
+            query.email = filters.email;
+        }
+        if (filters.status) {
+            query.status = filters.status;
+        }
+        if (filters.createdAt) {
+            query.createdAt = {
+                $gte: filters.createdAt.start,
+                $lte: filters.createdAt.end,
+            };
+
+        }
+        if (filters.manufacturerId) {
+            query.manufacturerId = filters.manufacturerId;
+        }
+        const orders = await database
+            .collection<Order>("Orders")
+            .find(query)
+            .toArray();
         await clientDB.close();
         return orders;
     } catch (error) {

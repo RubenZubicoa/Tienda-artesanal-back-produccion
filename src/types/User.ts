@@ -4,7 +4,7 @@ export type User = {
     _id?: ObjectId;
     name: string;
     email: string;
-    password: string;
+    password?: string;
     manufacturerId?: string;
     createdAt?: number;
     updatedAt?: number;

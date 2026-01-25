@@ -46,7 +46,9 @@ export async function insertUser(user: User) {
     try {
         await clientDB.connect();
         user.createdAt = Date.now();
-        user.password = await hashPassword(user.password);
+        if (user.password) {
+            user.password = await hashPassword(user.password);
+        }
         const result = await database.collection("Users").insertOne(user);
         await clientDB.close();
         return result;
@@ -63,10 +65,16 @@ export async function updateUser(userId: string, user: User) {
         if (!oldUser) {
             throw new Error("Usuario no encontrado");
         }
-        const isSamePassword = await comparePassword(user.password, oldUser.password);
-        if (isSamePassword === false) {
-            user.password = await hashPassword(user.password);
-        }
+        if (user.password) {
+            const isSamePassword = await comparePassword(user.password, oldUser.password);
+            console.log(isSamePassword, user.password, oldUser.password);
+            if (isSamePassword === false && user.password !== oldUser.password) {
+                console.log("cambio de password");
+                user.password = await hashPassword(user.password);
+            }else {
+                delete user.password;
+            }
+        }    
         await clientDB.connect();
         user.updatedAt = Date.now();        
         const result = await database.collection("Users").updateOne({ _id: new ObjectId(userId) }, { $set: user });

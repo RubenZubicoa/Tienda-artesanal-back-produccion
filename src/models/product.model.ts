@@ -6,9 +6,8 @@ export async function getProducts() {
     try {
         await clientDB.connect();
         const products = await database.collection("Products").find({ isDeleted: false }).toArray();
-        const productsWithImages = await getProductImages(products as Product[]);
         await clientDB.close();
-        return productsWithImages;
+        return products;
     } catch (error) {
         await clientDB.close();
         console.error(error);
@@ -43,9 +42,8 @@ export async function getProductsByFilters(filters: ProductFilters) {
         }
         query.isDeleted = false;
         const products = await database.collection<Product>("Products").find(query).toArray();
-        const productsWithImages = await getProductImages(products);
         await clientDB.close();
-        return productsWithImages;
+        return products;
     } catch (error) {
         await clientDB.close();
         console.error(error);
@@ -76,9 +74,8 @@ export async function getProductsByManufacturerId(manufacturerId: string) {
     try {
         await clientDB.connect();
         const products = await database.collection("Products").find({ manufacturerId: manufacturerId, isDeleted: false }).toArray();
-        const productsWithImages = await getProductImages(products as Product[]);
         await clientDB.close();
-        return productsWithImages;
+        return products;
     } catch (error) {
         await clientDB.close();
         console.error(error);
@@ -126,12 +123,4 @@ export async function deleteProduct(productId: Product['_id']) {
         console.error(error);
         throw new Error("Error al eliminar el producto");
     }
-}
-
-async function getProductImages(products: Product[]) {
-    for (const product of products) {
-        const result = await database.collection("ProductImages").findOne({ productId: (product._id as ObjectId).toString() });
-        product.images = result?.images || [];
-    }
-    return products;
 }

@@ -1,12 +1,16 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
+import path from "path";
+import url from "url";
 
-const connectionString = process.env.MONGO_URI;
+const connectionString =  process.env.MONGO_URI;
 
 if (!connectionString) {
     throw new Error("MONGO_URI is not set");
 }
 
-const clientDB = new MongoClient(connectionString,  {
+const databaseUrl = url.parse(connectionString);
+
+const clientDB = new MongoClient(databaseUrl.href,  {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,

@@ -8,9 +8,9 @@ if (!connectionString) {
     throw new Error("MONGO_URI is not set");
 }
 
-const databaseUrl = url.parse(connectionString);
+const databaseUrl = 'mongodb+srv://rubenzubicoatic_db_user:nJSfg6okTM3Av6fa@cluster0.rcwxcg8.mongodb.net/?appName=Cluster0';
 
-const clientDB = new MongoClient(databaseUrl.href,  {
+const clientDB = new MongoClient(databaseUrl,  {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,

@@ -1,5 +1,5 @@
 import config from './config/config';
-import { connectToDatabase } from './db/database';
+import { run as connectToDatabase } from './db/database';
 import server from './server';
 
 

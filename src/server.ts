@@ -11,6 +11,7 @@ import categoryRoutes from './routes/category.routes';
 import loginRoutes from './routes/login.routes';
 import meetingPointRoutes from './routes/meetingPoint.routes';
 import productImagesRoutes from './routes/product-images.routes';
+import { errorMiddleware } from './middlewares/error.middeware';
 
 const server: Application = express();
 
@@ -30,5 +31,8 @@ server.use('/api/categories', categoryRoutes);
 server.use('/api/login', loginRoutes);
 server.use('/api/meeting-points', meetingPointRoutes);
 server.use('/api/product-images', productImagesRoutes);
+
+// Middlewares
+server.use(errorMiddleware);
 
 export default server;

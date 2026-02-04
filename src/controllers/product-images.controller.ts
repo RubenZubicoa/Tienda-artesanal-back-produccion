@@ -1,17 +1,14 @@
 import { Request, Response } from "express";
 import { AddProductImages, isAddProductImages } from "../types/ProductImages";
-import { addProductImages as addProductImagesModel } from "../models/product-images.model";
+import { updateProductImages as updateProductImagesModel } from "../models/product-images.model";
 import { uploadToCloudinary } from "../libs/cloudinary";
 
 export async function addProductImages(req: Request, res: Response) {
     const productId = req.body.productId;
+    const oldImages: string = req.body.oldImages;
     const images = req.files as Express.Multer.File[];
-    const productImages: AddProductImages = { productId, images: [] };
-    if (!isAddProductImages(productImages)) {
-        return res.status(400).json({ message: "Datos de imágenes de producto inválidos" });
-    }
     try {
-        const imagesUrls = [];
+        const imagesUrls = [...JSON.parse(oldImages)];
         for await (const image of images) {
             const imageUrl = await uploadToCloudinary(image);
             if (!imageUrl) {
@@ -19,9 +16,7 @@ export async function addProductImages(req: Request, res: Response) {
             }
             imagesUrls.push(imageUrl);
         }
-        productImages.images = imagesUrls;
-        productImages.productId = productId;
-        const result = await addProductImagesModel(productImages);
+        const result = await updateProductImagesModel(productId, imagesUrls);
         res.status(201).json(result);
     } catch (error) {
         console.error(error);

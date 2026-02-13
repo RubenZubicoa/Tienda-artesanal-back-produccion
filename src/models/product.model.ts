@@ -20,6 +20,9 @@ export async function getProductsByFilters(filters: ProductFilters) {
         if (filters.manufacturerId) {
             query.manufacturerId = { $regex: filters.manufacturerId, $options: 'i' };
         }
+        if (filters.manufacturers) {
+            query.manufacturerId = { $in: filters.manufacturers };
+        }
         if (filters.name) {
             query.name = { $regex: filters.name, $options: 'i' };
         }

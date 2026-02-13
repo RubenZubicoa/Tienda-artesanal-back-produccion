@@ -16,6 +16,7 @@ export type Product = {
 
 export type ProductFilters = {
     manufacturerId?: string;
+    manufacturers: string[];
     name?: string;
     description?: string;
     price?: {

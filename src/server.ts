@@ -20,7 +20,7 @@ const server: Application = express();
 server.use(morgan('dev'));
 server.use(cors());
 server.use(express.json());
-// server.use(express.urlencoded({ extended: true }));
+server.use(express.urlencoded({ extended: true }));
 
 // Routes
 server.use('/api/manufacturers', manufacturerRoutes);

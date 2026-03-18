@@ -1,3 +1,5 @@
+import { generateToken, verifyToken as verifyTokenJWT } from "../libs/jwt";
+import { User } from "../types/User";
 import { comparePassword } from "../utils/password-utils";
 import { getUserByEmail } from "./user.model";
 
@@ -11,10 +13,21 @@ export async function login(email: string, password: string) {
         if (!isPasswordValid) {
             return null;
         }
-        return user;
+        const token = generateToken(user as User);
+        return { user, token };
     } catch (error) {
         console.error(error);
         throw new Error("Error al iniciar sesión");
+    }
+}
+
+export async function verifyToken(token: string) {
+    try {
+        const user = verifyTokenJWT(token);
+        return user;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Error al verificar el token");
     }
 }
 

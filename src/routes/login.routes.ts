@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { login } from "../controllers/login.controller";
+import { login, verifyToken } from "../controllers/login.controller";
 
 export const loginRoutes = Router();
 
 loginRoutes.post('/', login);
+loginRoutes.post('/verify-token', verifyToken);
 
 export default loginRoutes;
